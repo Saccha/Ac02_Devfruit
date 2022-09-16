@@ -1,0 +1,103 @@
+{% extends 'layouts.html' %}
+
+{% block content %}
+
+{% include '_messages.html' %}
+<div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Administrador</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="/admin">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/marcas">Marcas</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/categorias">Categorias</a>
+              </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Dropdown
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="{{url_for('addproduto')}}">Adicionar produtos</a>
+                <a class="dropdown-item" href="{{url_for('addcat')}}">Adicionar categoria</a>
+                <a class="dropdown-item" href="{{url_for('addmarca')}}">Adicionar marcas</a>
+              </div>
+          </ul>
+          <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          </form>
+        </div>
+      </nav>
+</div>
+<div class="containter mt-2">
+    <table class="table table-sm table-striped">
+        <thead>
+            <th>Serial</th>
+            <th>Produto</th>
+            <th>Preço</th>
+            <th>Peso</th>
+            <th>Desconto</th>
+            <th>Marca</th>
+            <th>Imagem</th>
+            <th>Editar</th>
+            <th>Remover</th>
+        </thead>
+
+        <tbody>
+            {% for produto in produtos %}
+            <tr>
+                <td>{{loop.index}}</td>
+                <td>{{produto.name}}</td>
+                <td>{{produto.price}}</td>
+                <td>{{produto.weight}}</td>
+                <td>{{produto.discount}}</td>
+                <td>{{produto.marca.name}}</td>
+                <td>Image</td> 
+                <td><a href="{{url_for('updateproduto', id=produto.id)}}" class="btn btn-primary btn-sm"btn>Editar</a></td>
+                <td>
+                  <form action="{{url_for('deleteproduto', id= produto.id)}}" method="POST">
+                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#exampleModal{{produto.id}}">Remover</button>
+                  </form>
+                </td>
+            </tr>
+           
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal{{produto.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">{{produto.name}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="text-danger">Deseja realmente remover este produto? {{produto.name}}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal">Cancelar</button>
+        <form action="{{url_for('deleteproduto', id= produto.id)}}" method="POST">
+          <button type="submit" class="btn btn-danger">Remover</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+            {% endfor %}
+        </tbody>
+
+    </table>
+</div>
+
+{% endblock content %}

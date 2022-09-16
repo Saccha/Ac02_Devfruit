@@ -1,0 +1,85 @@
+{% extends "layouts.html" %}
+
+{% block content %}
+<div class="container">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/">DevFruit</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            
+            <li class="nav-item">
+            <a class="nav-link" href="/">Todos produtos</a>
+            </li>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Categorias
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                {% for categoria in categorias %}
+                <a class="dropdown-item" href="{{url_for('get_categoria', id=categoria.id)}}">{{categoria.name}}</a>
+                {% endfor %}
+            </div>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Marcas 
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            {% for marca in marcas %}
+            <a class="dropdown-item" href="{{url_for('get_marca', id=marca.id)}}">{{marca.name}}</a>
+            {% endfor %}
+          </div>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="{{url_for('getCart')}}" tabindex="-1">Carrinho({{session['LojainCarrinho']|length}})</a>
+        </li>
+
+      </ul>
+      <form class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form>
+    </div>
+  </nav>
+</div>
+
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6" id="marca_image">
+            <img src="{{url_for('static',filename='images/'+ produto.name+'.jpg')}}" alt="{{produto.name}}" height="400">
+        </div>
+
+
+            <div class="col-md-6">
+                <h4> Nome Produto:{{produto.name}}</h4>
+                <br>
+                <p>Preço: R${{produto.price}}</p>
+                {% if produto.discount >0 %}
+                <b>Desconto: R${{produto.discount}}</b>
+                {% endif %}
+                <br>
+                <hr>
+                <p>Descrição: {{produto.description}}</p>
+                <hr>
+                <form action="{{url_for('AddCart')}}" method="POST">
+                    <input type="hidden" name="produto_id" value="{{produto.id}}">
+                    <button type="submit" class="btn btn-sm btn-warning">Adicionar ao carrinho</button>
+                    <label for=""> Quantidade: </label>
+                    <input type="number" name="quantity" id="" value="1" min="1" max="{{produto.stock}}">
+                    
+                </form>
+
+                
+            </div>
+        
+
+    </div>
+
+</div>
+
+{% endblock content %}

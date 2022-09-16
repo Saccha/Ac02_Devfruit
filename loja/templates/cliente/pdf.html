@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gerar PDF</title>
+  </head>
+  <body>
+</body>
+</html>
+
+<div class="container mt-2">
+    <div class="row">
+        <div class="col-md-12">
+            Numero do pedido: {{pedidos.notafiscal}}
+            <br>
+            Status do pedido: {{pedidos.status}}
+            <br>
+            Nome do cliente: {{cliente.name}}
+            <br>
+            Email do cliente: {{cliente.email}}
+            <br>
+            Contato do cliente: {{cliente.contact}}
+            <br>
+            <br>
+        <table class="table table-sm">
+            <thead>
+                <th>Código</th>
+                <th>Nome</th>   
+                <th>Peso</th>
+                <th>Preço</th>
+                <th>Quantidade</th>
+                <th>Desconto</th>
+                <th>Subtotal</th>
+
+
+            </thead>
+            <tbody>
+                {%for key, produto in pedidos.pedido.items() %}
+                {% set discount = "%0.2f" | format((produto.discount/100)* produto.price|float)%}
+                <tr>
+                    <td>{{loop.index}}</td>
+                    <td>{{produto.name}}</td>
+                        <td>{{produto.weight}}kg</td>
+                        <td>R$ {{produto.price}}</td>
+                        <td>{{produto.quantity}}</td>
+                        {% if produto.discount > 0 %}
+                        <td>{{produto.discount}}%&nbsp;=R${{discount}}</td>
+                        {% else %}
+                        <td></td>
+                        {% endif %}
+                        {% set subtotal = produto.quantity|int * produto.price|float %}
+                        <td>R${{"%0.2f"|format((subTotal|float)-discount|float)}}</td>
+                    </tr> 
+
+                    {% endfor %}
+                </tbody> 
+            </table>
+            <table class="table table-sm">
+                
+                
+                <tr>  
+                    <td >Imposto:R${{imposto}}</td>
+                    <td colspan="9"><b>Valor Pagar:R${{gTotal}}</b></td>
+                </tr> 
+            </table>  
+            
+        
+    </div>
+  </div>
+</div>

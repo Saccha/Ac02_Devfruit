@@ -1,0 +1,38 @@
+{% extends "layouts.html" %}
+
+{% block content %}
+
+{% include "navbar.html" %}
+
+<div class="container">
+    <div class="row">
+
+        {% for produto in produtos %}
+        <div class="col-md-3">
+            <div class="card">
+                <img src="{{url_for('static',filename='images/'+ produto.name+'.jpg')}}" alt="{{produto.name}}" class="card-img-top" height="180">
+                <div class="card-body">
+                    {% if produto.discount > 0 %}
+                    <h5 style="text-shadow: 1px 1px 2px rgb(32, 27, 27); color: rgb(23, 85, 8); transform: rotate(-5deg); position: absolute; top: 45%; left: 25%; font-weight: 600;" >{{produto.discount}}% de desconto</h5>
+                    {% endif %}
+                    <h4 class="text-center">{{produto.name}}</h4>
+                    <p class="text-center">Preço: R${{produto.price}}</p>
+                </div>
+                <div class="card-footer">
+                    <a href="{{url_for('pagina_unica', id=produto.id)}}" class="float-left  btn btn-sm btn-warning" >Detalhes</a>
+
+                    <form action="{{url_for('AddCart')}}" method="POST">
+                        <input type="hidden" name="produto_id" value="{{produto.id}}">
+                        <button type="submit" class="btn btn-sm btn-success float-down mt-1">Adicionar ao carrinho</button>
+                        <input type="hidden" name="quantity" id="" value="1" min="1" max="{{produto.stock}}">       
+                    </form>
+                    
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    </div>
+</div>
+{% endblock content %}

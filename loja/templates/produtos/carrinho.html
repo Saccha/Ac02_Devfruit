@@ -1,0 +1,63 @@
+{% extends "layouts.html" %}
+{% block content %}
+
+{% include "navbar.html" %}
+
+<div class="container mt-2">
+    {% include '_messages.html' %}
+    <div class="row">
+        <div class="col-md-12">
+        <table class="table table-sm">
+            <thead>
+                <th>Código</th>
+                <th>Nome</th>   
+                <th>Peso</th>
+                <th>Preço</th>
+                <th>Quantidade</th>
+                <th>Desconto</th>
+                <th>Subtotal</th>
+                <th>Atualizar</th>
+                <th>Remover</th>
+
+            </thead>
+            <tbody>
+                {%for key, produto in session['LojainCarrinho'].items() %}
+                {% set discount = "%0.2f" | format((produto.discount/100)* produto.price|float)%}
+                <tr>
+                    <td>{{loop.index}}</td>
+                    <td>{{produto.name}}</td>
+                    <form action="{{url_for('updateCarrinho', code=key)}}" method="POST">
+                        <td>{{produto.weight}}kg</td>
+                        <td>R$ {{produto.price}}</td>
+                        <td><input type="number" name="quantity" min="1" max="10" value="{{produto.quantity}}"></td>
+                        {% if produto.discount > 0 %}
+                        <td>{{produto.discount}}%&nbsp;=R${{discount}}</td>
+                        {% else %}
+                        <td></td>
+                        {% endif %}
+                        {% set subtotal = produto.quantity|int*produto.price|float%}
+                        <td>R${{"%0.2f"|format((subtotal|float)-discount|float)}}</td>
+                        
+                        <td><button type="submit" class="btn btn-primary btn-sm"href="#">Atualizar</button></td>
+                    </form>
+                    <td><a href="{{url_for('deleteItem', id=key)}}" class="btn btn-sm btn-danger">Remover</a></td>                 
+                </tr>
+                {% endfor %}
+                <tr>
+                    
+                    <td >Imposto:R${{imposto}}</td>
+                    <td colspan="9"><b>Valor Pagar:R${{valorpagar}}</b></td>
+                    
+                             
+                </tr>   
+            </tbody> 
+            <tr></tr>  
+        </table>
+        <td ><a href="{{url_for('pedido')}}" class="btn btn-success btn-sm">Ir para o pagamento</a></td>
+        <tr><a href="{{url_for('limparCarrinho')}}" class="btn btn-warning btn-sm float-right">Esvaziar carrinho</a></tr>
+    </div>
+  </div>
+</div>
+
+
+{% endblock content %}

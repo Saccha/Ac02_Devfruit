@@ -1,0 +1,63 @@
+<div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/">DevFruit</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                
+                <li class="nav-item">
+                <a class="nav-link" href="/">Todos produtos</a>
+                </li>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Categorias
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    {% for categoria in categorias %}
+                    <a class="dropdown-item" href="{{url_for('get_categoria', id=categoria.id)}}">{{categoria.name}}</a>
+                    {% endfor %}
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Marcas 
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                {% for marca in marcas %}
+                <a class="dropdown-item" href="{{url_for('get_marca', id=marca.id)}}">{{marca.name}}</a>
+                {% endfor %}
+              </div>
+            <li class="nav-item">
+                <a class="nav-link" href="{{url_for('getCart')}}" tabindex="-1">Carrinho({{session['LojainCarrinho']|length}})</a>
+            </li>
+            {% if current_user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link" href="/">Meu Perfil</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('clienteLogout')}}">Sair</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('cadastrar_cliente')}}">Cadastrar</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('clienteLogin')}}">Entrar</a>
+            </li>
+            {% endif %}
+
+    
+          </ul>
+          <form class="form-inline my-2 my-lg-0" method="POST">
+            <input class="form-control mr-sm-2" type="text" placeholder="Pesquisar produtos" autofocus="autofocus" name="search_string">
+            <input class="btn btn-outline-success my-2 my-sm-0" type="submit" formaction="/search" value="Pesquisar"></input>
+          </form>
+        </div>
+      </nav>
+    </div>
